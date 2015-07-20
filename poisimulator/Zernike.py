@@ -3,12 +3,14 @@
 
 import numpy as np
 from numpy import sqrt
+import functools
 import sys
 
 def NumZernike(m):
     """Return the number of polynomials up to and including radial order m"""
     return (m+1)*(m+2)//2
 
+@functools.lru_cache()
 def ZernikeGrid(gridSize,maxRadial,diameter=None):
     if diameter == None: diameter=gridSize
     radius=diameter/2.0
