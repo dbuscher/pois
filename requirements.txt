@@ -1,0 +1,6 @@
+astropy>=1.0.2
+matplotlib>=1.4.3
+numpy>=1.9.2
+Pillow>=2.9.0
+scipy>=0.15.1
+
