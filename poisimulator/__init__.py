@@ -1,7 +1,9 @@
 import numpy as np
-from Zernike import ZernikeGrid
-from PhaseScreen import ScreenGenerator
+from .Zernike import ZernikeGrid
+from .PhaseScreen import ScreenGenerator
 import sys
+
+__version__="0.1.0"
 
 def Atmosphere(numTelescope,r0,gridSize,screenSize=1024):
     """
@@ -15,8 +17,8 @@ def Atmosphere(numTelescope,r0,gridSize,screenSize=1024):
 
 def RadiusGrid(gridSize):
     """
-    Return a square grid with values of the radius from the centre 
-    of each gridpoint
+    Return a square grid with values of the distance from the centre 
+    of the grid to each gridpoint
     """
     x,y=np.mgrid[0:gridSize,0:gridSize]
     x = x-(gridSize-1.0)/2.0
