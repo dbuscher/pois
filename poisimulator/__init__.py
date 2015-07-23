@@ -65,7 +65,7 @@ def FibreMode(gridSize,modeDiameter):
     *modeDiameter*, normalised so that integral power over the mode is unity
     """
     rmode=modeDiameter/2
-    return np.exp(-(RadiusGrid(gridSize)/rmode)**2/(np.sqrt(np.pi/2)*rmode))
+    return np.exp(-(RadiusGrid(gridSize)/rmode)**2)/(np.sqrt(np.pi/2)*rmode)
 
 def FibreCouple(pupils,rmode):
     """
