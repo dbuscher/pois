@@ -1,5 +1,5 @@
 # Practical optical interferometry simulator
-
+![beampath.png](SNR-vs-diameter.png)
 This is a framework for simulating the data from a ground-based optical interferometer. It is provided as supplementary material to the book "Practical Optical Interferometry". See the [supplementary material main page](https://dbuscher.github.io/practical-optical-interferometry/) for more information.
 
 ## Introduction
