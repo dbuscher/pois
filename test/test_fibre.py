@@ -4,21 +4,20 @@ radius is 0.90 times the aperture radius
 
 Also, the optimum coupled power is 81%, i.e. coupled amplitude is 90%
 """
-from numpy import *
-import sys
-from Interferometer import Fiber
-from NumUtil import *
+from __future__ import (absolute_import, division,
+                        print_function, unicode_literals)
+from builtins import *
 
-def main(diameter=32):
-    screenSize=diameter
-    for modeSize in arange(0.5,1.1,0.01):
-        f=Fiber(diameter,diameter,modeSize)
-        aperture=CircularMask(diameter/2.0, screenSize, screenSize)
-        aperture=aperture/sqrt(Sum2d(aperture))
-        print modeSize, f.Couple(f.mode), f.Couple(aperture)
+import numpy as np
+from poisimulator import *
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        main()
-    else:
-        exec(sys.argv[1])
+def Efficiency(modeSize,gridSize=32):
+    diameter=gridSize
+    pupil=CircularMaskGrid(gridSize,diameter)
+    print(np.sqrt(np.sum(pupil)))
+    pupil=pupil/(np.sum(pupil))
+    return FibreCouple(pupil,diameter*modeSize)
+
+if __name__ == "__main__":
+    for modeSize in np.arange(0.5,1.1,0.01):
+        print(modeSize,Efficiency(modeSize))
