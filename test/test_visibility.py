@@ -7,6 +7,10 @@ from Interferometer import *
 from astropy.io import ascii
 import numpy as np
 
+def ChoosePupilDiameter(dr0,minPupilDiameter=32,minR0=3.0):
+    return(minPupilDiameter if minPupilDiameter/dr0 > minR0
+           else int(np.ceil(dr0*minR0)))
+
 def main(numIter=100000,screenSize=1024,
          numDiameter=50,minDiameter=0.1,maxDiameter=30):
     print "numRemove","d/r0","Vsq","stdVsq","fibrePspec","stdFibrePspec","couple","stdCouple","numIter","pupilSize", "screenSize"
