@@ -16,4 +16,8 @@ Download (for example using the "download as ZIP file" link on the right hand si
 ```python
 import poisimulator
 ```
-Example code using the modules is in the `examples/` directory.
+Example code using the modules is in the [tests](tests) directory.
+
+## Licencing
+
+The code is licenced under a 2-clause BSD licence (see [LICENCE.txt](LICENCE.txt)).
