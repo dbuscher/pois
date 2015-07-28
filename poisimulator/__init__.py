@@ -5,11 +5,22 @@ from builtins import *
 import numpy as np
 from .Zernike import ZernikeGrid
 from .PhaseScreen import ScreenGenerator
+import functools
 import sys
+
 
 __version__="0.1.0"
 
-def Atmosphere(numTelescope,r0,gridSize,screenSize=1024):
+def npreshape(a, newShape):
+    if newShape[0] == -1:
+        if len(newShape) != 2:
+            raise ValueError("new shape must be 2d")
+        newShape=(np.prod(a.shape)/newShape[1],newShape[1])
+    b=a.view()
+    b.shape=newShape
+    return b
+
+def PhaseScreens(numTelescope,r0,gridSize,screenSize=1024):
     """
     Return a generator for atmospheric wavefront across a set of 
     numTelescope telescopes. Use next() to get the next set of screens.
@@ -19,6 +30,7 @@ def Atmosphere(numTelescope,r0,gridSize,screenSize=1024):
     while 1:
         yield np.array([next(screen) for screen in screenGenerators])
 
+@functools.lru_cache()
 def RadiusGrid(gridSize):
     """
     Return a square grid with values of the distance from the centre 
@@ -29,6 +41,7 @@ def RadiusGrid(gridSize):
     y = y-(gridSize-1.0)/2.0
     return np.abs(x+1j*y)
 
+@functools.lru_cache()
 def CircularMaskGrid(gridSize, diameter=None):
     """
     Return a square grid with ones inside and zeros outside a given 
@@ -39,7 +52,7 @@ def CircularMaskGrid(gridSize, diameter=None):
 
 
 def ComplexPupil(pupils,diameter=None):
-    return exp(1j*pupils)*CircularMaskGrid(pupils.shape[-1],diameter)
+    return np.exp(1j*pupils)*CircularMaskGrid(pupils.shape[-1],diameter)
 
 def AdaptiveOpticsCorrect(pupils,diameter,maxRadial,numRemove=None):
     """
@@ -59,6 +72,8 @@ def AdaptiveOpticsCorrect(pupils,diameter,maxRadial,numRemove=None):
         pupilsVector=pupilsVector-zernikes[i]*amplitudes[:,np.newaxis]
     return np.reshape(pupilsVector,pupils.shape)
 
+
+@functools.lru_cache()
 def FibreMode(gridSize,modeDiameter):
     """
     Return a pupil-plane Gaussian mode with 1/e diameter given by 
@@ -67,23 +82,25 @@ def FibreMode(gridSize,modeDiameter):
     rmode=modeDiameter/2
     return np.exp(-(RadiusGrid(gridSize)/rmode)**2)/(np.sqrt(np.pi/2)*rmode)
 
-def FibreCouple(pupils,rmode):
+def FibreCouple(pupils,modeDiameter):
     """
     Return the complex amplitudes coupled into a set of fibers
     """
     gridSize=pupils.shape[-1]
     pupilsVector=np.reshape(pupils,(-1,gridSize**2))
-    mode=np.reshape(FibreMode(gridSize,rmode),(gridSize**2,))
+    mode=np.reshape(FibreMode(gridSize,modeDiameter),(gridSize**2,))
     return np.inner(pupilsVector,mode)
 
-def MonomodeCombine(pupils,rmode):
+def MonomodeCombine(pupils,modeDiameter=None):
     """
     Return the instantaneous coherent fluxes and photometric fluxes for a
     multiway monomode fibre combiner
     """
-    amplitudes=FibreCouple(pupils,rmode)
-    cc=conj(amplitudes)
-    fluxes=amplitudes*cc
+    if modeDiameter is None:
+        modeDiameter=0.9*pupils.shape[-1]
+    amplitudes=FibreCouple(pupils,modeDiameter)
+    cc=np.conj(amplitudes)
+    fluxes=(amplitudes*cc).real
     coherentFluxes=[amplitudes[i]*cc[j]
                     for i in range(1,len(amplitudes))
                     for j in range(i)]
@@ -94,11 +111,9 @@ def MultimodeCombine(pupils):
     Return the instantaneous coherent fluxes and photometric fluxes for a
     multiway multimode combiner (no spatial filtering)
     """
-    gridSize=pupils.shape[-1]
-    pupilsVector=np.reshape(pupils,(-1,gridSize**2))
-    cc=conj(pupils)
-    fluxes=np.inner(pupilsVector,cc)
-    coherentFluxes=[np.inner(pupilsVector[i],cc[j])
-                    for i in range(1,len(amplitudes))
+    fluxes=[np.vdot(pupils[i],pupils[i]).real for i in range(len(pupils))]
+    coherentFluxes=[np.vdot(pupils[i],pupils[j])
+                    for i in range(1,len(pupils))
                     for j in range(i)]
+    return fluxes,coherentFluxes
 
