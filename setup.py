@@ -6,7 +6,7 @@ import codecs
 import os
 import sys
 
-import poisimulator
+import pois
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -34,9 +34,9 @@ class PyTest(TestCommand):
         sys.exit(errcode)
 
 setup(
-    name='poisimulator',
-    version=poisimulator.__version__,
-    url='http://github.com/dbuscher/poisimulator/',
+    name='pois',
+    version=pois.__version__,
+    url='http://github.com/dbuscher/pois/',
     license='BSD 2-clause License',
     author='David Buscher',
     tests_require=['pytest'],
@@ -46,10 +46,10 @@ setup(
     author_email='dfb@mrao.cam.ac.uk',
     description='Simulation framework for optical interferometers',
     long_description=long_description,
-    packages=['poisimulator'],
+    packages=['pois'],
     include_package_data=True,
     platforms='any',
-    test_suite='poisimulator.test.test_poisimulator',
+    test_suite='pois.test.test_pois',
     classifiers = [
         'Programming Language :: Python',
         'Development Status :: 4 - Beta',

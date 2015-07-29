@@ -37,7 +37,7 @@ import pois
 ```
 
 ## Pronunciation
-The package name should be pronounced as it would be in the phrase "petit pois".
+The package name should be pronounced as it would be in the phrase "petits pois".
 
 ## Licencing
 

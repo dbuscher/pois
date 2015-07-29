@@ -33,11 +33,11 @@ Installation
 
 Download (for example using the “download as ZIP file” link on the right
 hand side of the page) and unpack a copy of this repository. The module
-“poisimulator” can be copied to the Python path and then imported using
+“pois” can be copied to the Python path and then imported using
 
 .. code:: python
 
-    import poisimulator
+    import pois
 
 Example code using the modules is in the ``examples/`` directory.
 

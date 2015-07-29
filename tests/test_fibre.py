@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division,
 from builtins import *
 
 import numpy as np
-from poisimulator import *
+from pois import *
 
 def CouplingEfficiency(modeSize,gridSize=100):
     diameter=gridSize

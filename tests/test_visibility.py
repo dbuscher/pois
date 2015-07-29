@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import sys
-from poisimulator import *
+from pois import *
 import numpy as np
 from astropy.table import Table
 from astropy.io import ascii

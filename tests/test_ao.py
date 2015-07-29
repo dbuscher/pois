@@ -3,7 +3,7 @@ from __future__ import (absolute_import, division,
 from builtins import *
 
 import numpy as np
-from poisimulator import *
+from pois import *
 
 # Results from Noll (1976)
 Noll=[1.0299,0.582,0.134,0.111,0.0880,0.0648,0.0587,0.0525,0.0463,0.0401,0.0377,0.0352,0.0328,0.0304,0.0279,0.0267,0.0255,0.0243,0.0232,0.0220,0.0208]
