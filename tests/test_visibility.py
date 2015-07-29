@@ -45,8 +45,8 @@ def ChoosePupilDiameter(dr0,minPupilDiameter=32,minR0=3.0):
     return(minPupilDiameter if minPupilDiameter/dr0 > minR0
            else int(np.ceil(dr0*minR0)))
 
-def main(numIter=10000,screenSize=1024,
-         numDiameter=1,minDiameter=0.1,maxDiameter=30,
+def main(numIter=1000,screenSize=1024,
+         numDiameter=20,minDiameter=0.1,maxDiameter=30,
          radialOrders=(1,)):
     """Run a set of simulations for different interferometer parameters"""
     results=[]

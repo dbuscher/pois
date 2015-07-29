@@ -1,22 +1,43 @@
-# Practical optical interferometry simulator
+# Python optical interferometry simulation (pois)
 ![beampath.png](SNR-vs-diameter.png)
-This is a framework for simulating the data from a ground-based optical interferometer. It is provided as supplementary material to the book "Practical Optical Interferometry". See the [supplementary material main page](https://dbuscher.github.io/practical-optical-interferometry/) for more information.
+This is a python package for simulating the data from a ground-based astronomical optical interferometer perturbed by atmospheric seeing perturbations. It is provided as supplementary material for the book ["Practical Optical Interferometry"](https://dbuscher.github.io/practical-optical-interferometry/), and is derived from the code which was used to provide data for many of the figures in the book.
 
 ## Introduction
+This python package provides the building blocks to simulate the operation of a multi-telescope interferometer. These include functions to:
 
-The code provides the building blocks to simulate the operation of a multi-telescope interferometer: at present it provides functions to generate simulated atmospheric turbulent wavefront perturbations, do adaptive optics correction of the turbulence and combine beams from an arbitrary number of telescopes, with or without spatial filtering. This code is derived from the code which was used to provide data for many of the figures in the book.
+* generate simulated atmospheric turbulent wavefront perturbations
+* correct these perturbations using adaptive optics
+* combine beams from an arbitrary number of telescopes, with or without spatial filtering, to provide complex fringe visibility measurements.
 
-The model for the interferometer is relatively abstract and general-purpose, but is designed so that it can be extended to include details such as fringe-tracking, detection noise and so forth. A functional-programming style has been adopted in order to try and make it as modular and extensible as possible. 
+The code has been written following a functional-programming style (in other words minimising side-effects in the code where possible) in order to try and make it modular and extensible. 
+
+Example code using the package is in the [tests](tests) directory. The file [tests/test_visibility.py](tests/test_visibility.py) includes a complete simulation for determining visibility losses and single-mode fibre coupling losses as a function of the diameter of the telescopes.
 
 ## Requirements
-The simulator runs under Python3 with Numpy > 1.7.0.
+The simulator runs under Python3 and requires `numpy`. Some of the demonstration code uses `astropy` for manipulating and saving data tables.
 
 ## Installation
-Download (for example using the "download as ZIP file" link on the right hand side of the page) and unpack a copy of this repository. The module "poisimulator" can be copied to the Python path and then imported using
-```python
-import poisimulator
+On unix-like systems do
 ```
-Example code using the modules is in the [tests](tests) directory.
+pip3 install pois
+```
+
+Alternatively download and unpack a copy of this repository and then use
+```
+python3 setup.py install
+```
+
+This should install the package into Python path and so it can be imported using
+```python
+from pois import *
+```
+or
+```python
+import pois
+```
+
+## Pronunciation
+The package name should be pronounced as it would be in the phrase "petit pois".
 
 ## Licencing
 
