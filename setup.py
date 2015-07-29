@@ -58,7 +58,7 @@ setup(
         'Development Status :: 4 - Beta',
         'Natural Language :: English',
         'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License'
+        'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Topic :: Scientific/Engineering :: Physics',
