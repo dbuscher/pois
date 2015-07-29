@@ -41,4 +41,4 @@ The package name should be pronounced as it would be in the phrase "petits pois"
 
 ## Licencing
 
-The code is licenced under a 2-clause BSD licence (see [LICENCE.txt](LICENCE.txt)).
+The code is licenced under a 2-clause BSD licence (see [LICENCE](LICENCE)).
