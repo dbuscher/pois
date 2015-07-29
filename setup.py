@@ -21,47 +21,48 @@ def read(*filenames, **kwargs):
 
 long_description = read('README.rst', 'CHANGES.txt')
 
-# This stuff likely won't work at present
+# Use pytest for testing
 class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', "Arguments to pass to py.test")]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
     def finalize_options(self):
         TestCommand.finalize_options(self)
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
         import pytest
-        errcode = pytest.main(self.test_args)
-        sys.exit(errcode)
+        errno = pytest.main(self.pytest_args)
+        sys.exit(errno)
 
 setup(
     name='pois',
     version=pois.__version__,
     url='http://github.com/dbuscher/pois/',
-    license='BSD 2-clause License',
     author='David Buscher',
-    tests_require=['pytest'],
     install_requires=['numpy',
                     ],
-    cmdclass={'test': PyTest},
     author_email='dfb@mrao.cam.ac.uk',
-    description='Simulation framework for optical interferometers',
+    description='Python optical interferometer simulation',
     long_description=long_description,
     packages=['pois'],
     include_package_data=True,
     platforms='any',
-    test_suite='pois.test.test_pois',
     classifiers = [
-        'Programming Language :: Python',
+        'Programming Language :: Python :: 3',
         'Development Status :: 4 - Beta',
         'Natural Language :: English',
-        'Environment :: Web Environment',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD Software License',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License'
         'Operating System :: OS Independent',
         'Topic :: Scientific/Engineering :: Astronomy',
         'Topic :: Scientific/Engineering :: Physics',
         ],
-    extras_require={
-        'testing': ['pytest'],
-    }
+    tests_require=['pytest'],
+    cmdclass = {'test': PyTest},
 )
