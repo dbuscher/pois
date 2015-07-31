@@ -9,25 +9,21 @@ import functools
 import sys
 
 
-__version__="0.2.1"
+__version__="0.3.0"
 
-def npreshape(a, newShape):
-    if newShape[0] == -1:
-        if len(newShape) != 2:
-            raise ValueError("new shape must be 2d")
-        newShape=(np.prod(a.shape)/newShape[1],newShape[1])
-    b=a.view()
-    b.shape=newShape
-    return b
-
-def PhaseScreens(numTelescope,r0,gridSize,screenSize=1024):
+def PhaseScreens(numTelescope,r0,pupilSize,screenSize=1024,numRealisation=-1):
+    """Return a generator for atmospheric wavefront perturbations across
+    a set of *numTelescope* telescopes, each of size *pupilSize* and
+    with Fried parameter *r0*. The perturbations are modelled as being
+    uncorrelated between telescopes. The number of realisations is given
+    by *numRealisation*, but if *numRealisation* is negative then an 
+    infinite sequence of realisations is generated.
     """
-    Return a generator for atmospheric wavefront across a set of 
-    numTelescope telescopes. Use next() to get the next set of screens.
-    """
-    screenGenerators=[ScreenGenerator(screenSize,r0,gridSize,gridSize)
+    screenGenerators=[ScreenGenerator(screenSize,r0,pupilSize,pupilSize)
                       for i in range(numTelescope)]
-    while 1:
+    iter=0
+    while numRealisation<0 or iter<numRealisation:
+        iter+=1
         yield np.array([next(screen) for screen in screenGenerators])
 
 @functools.lru_cache()
@@ -91,10 +87,10 @@ def FibreCouple(pupils,modeDiameter):
     mode=np.reshape(FibreMode(gridSize,modeDiameter),(gridSize**2,))
     return np.inner(pupilsVector,mode)
 
-def MonomodeCombine(pupils,modeDiameter=None):
+def SingleModeCombine(pupils,modeDiameter=None):
     """
     Return the instantaneous coherent fluxes and photometric fluxes for a
-    multiway monomode fibre combiner
+    multiway single-mode fibre combiner
     """
     if modeDiameter is None:
         modeDiameter=0.9*pupils.shape[-1]

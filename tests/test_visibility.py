@@ -10,8 +10,6 @@ def VisibilityStats(numTelescope,pupilSize,r0,radialOrder,
                     screenSize, numIter):
     """Return visibility statistics from a simulation of an interferometer 
     over numIter phase screens"""
-    # Set up phase screen generator
-    phaseScreens=PhaseScreens(numTelescope,r0,pupilSize,screenSize)
     # Set up per-iteration storage
     numCoherent=numTelescope*(numTelescope-1)//2
     cohFluxes=np.zeros((numIter,numCoherent),dtype=np.complex128)
@@ -19,12 +17,12 @@ def VisibilityStats(numTelescope,pupilSize,r0,radialOrder,
     fibreCohFluxes=np.zeros((numIter,numCoherent),dtype=np.complex128)
     fibreFluxes=np.zeros((numIter,numTelescope))
     # Run simulation
-    for iter in range(numIter):
-        pupils=AdaptiveOpticsCorrect(next(phaseScreens),pupilSize,radialOrder)
+    for iter, phaseScreens in enumerate(PhaseScreens(numTelescope,r0,pupilSize,
+                                                     screenSize,numIter)):
+        pupils=AdaptiveOpticsCorrect(phaseScreens,pupilSize,radialOrder)
         complexPupils=ComplexPupil(pupils)
-        #print(MultimodeCombine(complexPupils))
         fluxes[iter],cohFluxes[iter]=MultimodeCombine(complexPupils)
-        fibreFluxes[iter],fibreCohFluxes[iter]=MonomodeCombine(complexPupils)
+        fibreFluxes[iter],fibreCohFluxes[iter]=SingleModeCombine(complexPupils)
     # Postprocess results
     rawPowerSpectrum=abs(cohFluxes)**2
     fibrePowerSpectrum=abs(fibreCohFluxes)**2
@@ -67,7 +65,7 @@ def main(numIter=1000,screenSize=1024,
                       'screenSize':screenSize,})
             results.append(r)
     results=Table(results,names=("radialOrder","d/r0","Vsq","stdVsq","fibrePspec","stdFibrePspec","couple","stdCouple","numIter","pupilSize", "screenSize"))
-    ascii.write(results,time.strftime("%y%m%d-%H%M.dat"),
+    ascii.write(results,time.strftime("tmp%y%m%d-%H%M.dat"),
                 format='fixed_width',
                 bookend=False,
                 delimiter=None,
