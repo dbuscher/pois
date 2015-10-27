@@ -9,7 +9,7 @@ import functools
 import sys
 
 
-__version__="0.3.0"
+__version__="0.4.0"
 
 def PhaseScreens(numTelescope,r0,pupilSize,screenSize=1024,numRealisation=-1):
     """Return a generator for atmospheric wavefront perturbations across
